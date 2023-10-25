@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dlm32eoys3cxn"]
+
+[ext_resource type="Script" path="res://scenes/mechanics/spikes/small_spike.gd" id="1_1gjvg"]
+[ext_resource type="Texture2D" uid="uid://xn42qox4bwx1" path="res://assets/images/mechanics/Spikes.png" id="1_42n4x"]
+
+[node name="SmallSpike" type="Area2D"]
+script = ExtResource("1_1gjvg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+texture = ExtResource("1_42n4x")
+region_enabled = true
+region_rect = Rect2(32, 16, 16, 16)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(0, -8)
+polygon = PackedVector2Array(-8, 8, 0, -8, 8, 8)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

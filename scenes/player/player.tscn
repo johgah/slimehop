@@ -1,0 +1,278 @@
+[gd_scene load_steps=22 format=3 uid="uid://cm7fe06d6kx7n"]
+
+[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_clx1s"]
+[ext_resource type="Texture2D" uid="uid://b8wmg1npxcxv" path="res://assets/images/player/Slimpurt-Spritesheet.png" id="2_3d3py"]
+[ext_resource type="Script" path="res://scenes/player/state_machine.gd" id="2_au1pb"]
+[ext_resource type="Script" path="res://scenes/player/states/idle_state.gd" id="4_d445k"]
+[ext_resource type="Script" path="res://scenes/player/states/walk_state.gd" id="5_yh40e"]
+[ext_resource type="Script" path="res://scenes/player/states/jump_state.gd" id="6_x7bcu"]
+[ext_resource type="Script" path="res://scenes/player/states/crouch_state.gd" id="7_hdwdw"]
+[ext_resource type="Script" path="res://scenes/player/states/clone_state.gd" id="8_88p10"]
+[ext_resource type="Script" path="res://scenes/level/Camera2D.gd" id="8_qpn2u"]
+[ext_resource type="Script" path="res://scenes/player/states/dummy_state.gd" id="9_mhu1g"]
+[ext_resource type="Script" path="res://scenes/player/states/death_state.gd" id="10_8yhm8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2a76y"]
+size = Vector2(30, 18)
+
+[sub_resource type="Animation" id="Animation_1rqfd"]
+resource_name = "crouch"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_uk08c"]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_s5brs"]
+resource_name = "jump"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [3]
+}
+
+[sub_resource type="Animation" id="Animation_s81vm"]
+resource_name = "walk"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+
+[sub_resource type="Animation" id="Animation_ou4tq"]
+resource_name = "death"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CPUParticles2D:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_on_main_death_finish"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_pgnon"]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_k0nkn"]
+resource_name = "death_clone"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CPUParticles2D:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_on_clone_death_finish"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1vj18"]
+_data = {
+"RESET": SubResource("Animation_pgnon"),
+"crouch": SubResource("Animation_1rqfd"),
+"death": SubResource("Animation_ou4tq"),
+"death_clone": SubResource("Animation_k0nkn"),
+"idle": SubResource("Animation_uk08c"),
+"jump": SubResource("Animation_s5brs"),
+"walk": SubResource("Animation_s81vm")
+}
+
+[sub_resource type="Gradient" id="Gradient_ibw2d"]
+colors = PackedColorArray(0.996078, 0.239216, 0.298039, 0.54902, 0.996094, 0.238281, 0.296875, 1)
+
+[node name="Player" type="CharacterBody2D" groups=["players"]]
+script = ExtResource("1_clx1s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(31, 29)
+shape = SubResource("RectangleShape2D_2a76y")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(-1, -9)
+texture = ExtResource("2_3d3py")
+centered = false
+hframes = 2
+vframes = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "idle"
+libraries = {
+"": SubResource("AnimationLibrary_1vj18")
+}
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("2_au1pb")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("4_d445k")
+
+[node name="Walk" type="Node" parent="StateMachine"]
+script = ExtResource("5_yh40e")
+
+[node name="Jump" type="Node" parent="StateMachine"]
+script = ExtResource("6_x7bcu")
+
+[node name="Crouch" type="Node" parent="StateMachine"]
+script = ExtResource("7_hdwdw")
+
+[node name="Clone" type="Node" parent="StateMachine"]
+script = ExtResource("8_88p10")
+can_clone = false
+
+[node name="Dummy" type="Node" parent="StateMachine"]
+script = ExtResource("9_mhu1g")
+horizontal_flip = false
+can_clone = false
+
+[node name="Death" type="Node" parent="StateMachine"]
+script = ExtResource("10_8yhm8")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 469.0
+offset_top = 4.0
+offset_right = 598.0
+offset_bottom = 56.0
+text = "Velocity: (inf, inf)
+state"
+
+[node name="CameraFollower" type="Marker2D" parent="."]
+position = Vector2(31, 29)
+
+[node name="Camera2D" type="Camera2D" parent="CameraFollower"]
+script = ExtResource("8_qpn2u")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+position = Vector2(32, 19)
+target_position = Vector2(0, -32)
+
+[node name="Label" type="Label" parent="RayCast2D"]
+offset_left = 8.0
+offset_top = -28.0
+offset_right = 48.0
+offset_bottom = -5.0
+text = "lol"
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+position = Vector2(32, 23)
+emitting = false
+amount = 25
+one_shot = true
+explosiveness = 1.0
+emission_shape = 1
+emission_sphere_radius = 7.5
+direction = Vector2(0, -20)
+spread = 50.0
+initial_velocity_min = 111.11
+initial_velocity_max = 161.62
+scale_amount_min = 2.0
+scale_amount_max = 2.0
+color = Color(0.996094, 0.238281, 0.296875, 1)
+color_ramp = SubResource("Gradient_ibw2d")

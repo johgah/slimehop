@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dce42chhhdccv"]
+
+[ext_resource type="Texture2D" uid="uid://xn42qox4bwx1" path="res://assets/images/mechanics/Spikes.png" id="1_ddoqc"]
+[ext_resource type="Script" path="res://scenes/mechanics/spikes/large_spike.gd" id="1_lpuad"]
+
+[node name="LargeSpike" type="Area2D"]
+script = ExtResource("1_lpuad")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+texture = ExtResource("1_ddoqc")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(0, -16)
+polygon = PackedVector2Array(-16, 16, 0, -16, 16, 16)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
